@@ -1,26 +1,52 @@
-import React from "react";
+import React, { useState, useEffect, useContext } from 'react';
+import { Context } from "../store/appContext";
 
-//include images into your bundle
-import rigoImage from "../../img/rigo-baby.jpg";
-
-//create your first component
 const Home = () => {
-	return (
-		<div className="text-center">
-			<h1 className="text-center mt-5">Hello Rigo!</h1>
-			<p>
-				<img src={rigoImage} />
-			</p>
-			<a href="#" className="btn btn-success">
-				If you see this green button... bootstrap is working...
-			</a>
-			<p>
-				Made by{" "}
-				<a href="http://www.4geeksacademy.com">4Geeks Academy</a>, with
-				love!
-			</p>
-		</div>
-	);
+  const { store, actions } = useContext(Context);
+  const [tasks, setTasks] = useState([]);
+  const [newTask, setNewTask] = useState("");
+
+
+  useEffect(() => {
+    actions.fetchTasks().then(data => setTasks(data));
+  }, []);
+
+  const addTask = () => {
+    const updatedTasks = [...tasks, newTask];
+    setTasks(updatedTasks);
+    actions.updateTasks(updatedTasks);
+    setNewTask("");
+  };
+
+  const deleteTask = (index) => {
+    const updatedTasks = tasks.filter((_, i) => i !== index);
+    setTasks(updatedTasks);
+    actions.updateTasks(updatedTasks);
+  };
+
+  const deleteAllTasks = () => {
+    setTasks([]);
+    actions.deleteAllTasks();
+  };
+
+  return (
+    <div>
+      <input
+        type="text"
+        value={newTask}
+        onChange={e => setNewTask(e.target.value)}
+        placeholder="New task"
+      />
+      <button onClick={addTask}>Add Task</button>
+      <button onClick={deleteAllTasks}>Delete All Tasks</button>
+      {tasks.map((task, index) => (
+        <div key={index}>
+          {task}
+          <button onClick={() => deleteTask(index)}>Delete</button>
+        </div>
+      ))}
+    </div>
+  );
 };
 
 export default Home;
