@@ -1,10 +1,9 @@
 const getState = ({ getStore, getActions, setStore }) => {
     return {
       store: {
-        // ...
       },
       actions: {
-        // ...
+        //Fetches and Deletes
   
         fetchTasks: async () => {
           try {

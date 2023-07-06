@@ -28,7 +28,7 @@ const Home = () => {
     setTasks([]);
     actions.deleteAllTasks();
   };
-
+//Actual page
   return (
     <div>
       <input
